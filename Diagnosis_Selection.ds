@@ -1,0 +1,1381 @@
+/*
+ * Author       : sweta.kala
+ * Generated on : 22-Jan-2021 21:09:54
+ * Version      : 1.0
+ */
+ application "Diagnosis Selection"
+ {
+ 	date format = "dd-MMM-yyyy"
+ 	time zone = "America/Los_Angeles"
+ 	time format = "24-hr"
+	section Diagnoses
+	{
+		icon = "tech-desktop"
+		form Diagnosis_Form
+		{
+			displayname = "Diagnosis Form"
+			success message = ""
+			field alignment = right
+			Section1
+			(
+				type = section
+				displayname = "gg"
+	 			row = 1
+	 			column = 0   
+				width = medium
+			)
+			must have Gender
+			(
+				type = radiobuttons
+				values = {"Male", "Female"}
+				initial value = "Male"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			must have Age
+			(
+				type = number
+				maxchar = 2
+				initial value = 25
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			must have Body_Location
+			(
+				type = picklist
+				displayname = "Body Location"
+				values  = BL.ID
+    			displayformat = [Name]
+				sortorder = ascending
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			must have Sub_Location
+			(
+				type = picklist
+				displayname = "Sub Location"
+				values  = Sub_Location[Body_Location_ID == input.Body_Location.BodyLocationID].ID
+    			displayformat = [Sub_Location_Name]
+				sortorder = ascending
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			must have Symptoms
+			(
+				type = list
+				values  = Symptoms[Sub_Body_Location_ID == input.Sub_Location.Sub_Location_ID].ID
+    			displayformat = [Symptom_Name]
+				sortorder = ascending
+				height = 60px
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+	
+			customize
+			(
+				icon = "design-2-form"
+			)
+			actions
+			{
+				on add
+				{
+					submit
+					(
+   						type = submit
+   						displayname = "Submit"
+					)
+					reset
+					(
+   						type = reset
+   						displayname = "Reset"
+					)
+				}
+				on edit
+				{
+					update
+					(
+   						type = submit
+   						displayname = "Update"
+					)
+					cancel
+					(
+   						type = cancel
+   						displayname = "Cancel"
+					)
+				}
+			}
+		}
+		default list All_Diagnoses
+		{
+			displayName = "All Diagnoses"
+			show all rows from Diagnosis_Form    
+			(
+				Age
+				Gender
+				Body_Location as "Body Location"
+				Sub_Location as "Sub Location"
+				Symptoms
+			)
+			options
+			(
+				icon = "travel-world"
+	 		)
+			quickview
+			(
+				layout
+				(
+		 			type = -1
+					datablock1
+					(
+			 			layout type = -1
+		     			title = "Overview"
+						fields
+						(
+							Age
+							Gender
+							Body_Location as "Body Location"
+							Sub_Location as "Sub Location"
+							Symptoms
+						)
+					)
+				)
+
+				menu
+    			(
+    	 			header
+    	 			(
+    		 			Edit 
+    		 			Duplicate 
+    		 			Delete 
+    	 			)
+							record
+							(
+								Edit   	   
+								Duplicate   	   
+								Delete   	   
+    						)
+    			)
+    			action
+    			(
+							on click
+							(
+								View Record   	   
+    						)
+							on right click
+							(
+								Edit   	   
+								Delete   	   
+								Duplicate   	   
+								View Record   	   
+    						)
+     			)
+			)
+			detailview
+			(
+				layout
+				(
+		 			type = 1
+					datablock1
+					(
+			 			layout type = -2
+		     			title = "Overview"
+						fields
+						(
+							Age
+							Gender
+							Body_Location as "Body Location"
+							Sub_Location as "Sub Location"
+							Symptoms
+						)
+					)
+				)
+
+				menu
+    			(
+    	 			header
+    	 			(
+    		 			Edit 
+    		 			Duplicate 
+    		 			Delete 
+    	 			)
+    			)
+			)
+		}
+	}
+	section BL
+	{
+		icon = "tech-desktop"
+		form BL
+		{
+			displayname = "Body Location"
+			success message = "Data Added Successfully!"
+			field alignment = left
+			Section
+			(
+				type = section
+	 			row = 1
+	 			column = 0   
+				width = medium
+			)
+			must have unique BodyLocationID
+			(
+				type = number
+				displayname = "ID"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			Name
+			(
+    			type = text
+				private = true
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+	
+			customize
+			(
+				icon = "ui-1-bold-add"
+			)
+			actions
+			{
+				on add
+				{
+					submit
+					(
+   						type = submit
+   						displayname = "Submit"
+					)
+					reset
+					(
+   						type = reset
+   						displayname = "Reset"
+					)
+				}
+				on edit
+				{
+					update
+					(
+   						type = submit
+   						displayname = "Update"
+					)
+					cancel
+					(
+   						type = cancel
+   						displayname = "Cancel"
+					)
+				}
+			}
+		}
+		default list BL_Report
+		{
+			displayName = "BL Report"
+			show all rows from BL    
+			(
+				BodyLocationID as "ID"
+				Name
+			)
+			options
+			(
+				icon = "business-laptop-71"
+	 		)
+			quickview
+			(
+				layout
+				(
+		 			type = -1
+					datablock1
+					(
+			 			layout type = -1
+		     			title = "Overview"
+						fields
+						(
+							BodyLocationID as "ID"
+							Name
+						)
+					)
+				)
+
+				menu
+    			(
+    	 			header
+    	 			(
+    		 			Edit 
+    		 			Duplicate 
+    		 			Delete 
+    	 			)
+							record
+							(
+								Edit   	   
+								Duplicate   	   
+								Delete   	   
+    						)
+    			)
+    			action
+    			(
+							on click
+							(
+								View Record   	   
+    						)
+							on right click
+							(
+								Edit   	   
+								Delete   	   
+								Duplicate   	   
+								View Record   	   
+    						)
+     			)
+			)
+			detailview
+			(
+				layout
+				(
+		 			type = 1
+					datablock1
+					(
+			 			layout type = -2
+		     			title = "Overview"
+						fields
+						(
+							BodyLocationID as "ID"
+							Name
+						)
+					)
+				)
+
+				menu
+    			(
+    	 			header
+    	 			(
+    		 			Edit 
+    		 			Duplicate 
+    		 			Delete 
+    	 			)
+    			)
+			)
+		}
+	}
+	section Sub_Locations
+	{
+		displayname= "Sub Locations"
+		icon = "location-pin-copy"
+		form Sub_Location
+		{
+			displayname = "Sub Location"
+			success message = "Sub Location Added Successfully"
+			field alignment = left
+			Section
+			(
+				type = section
+	 			row = 1
+	 			column = 0   
+				width = medium
+			)
+			Body_Location_ID
+			(
+				type = number
+				displayname = "Body Location ID"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			must have unique Sub_Location_ID
+			(
+				type = number
+				displayname = "Sub Location ID"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			must have Sub_Location_Name
+			(
+    			type = text
+				displayname = "Sub Location Name"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+	
+			customize
+			(
+				icon = "weather-compass"
+			)
+			actions
+			{
+				on add
+				{
+					submit
+					(
+   						type = submit
+   						displayname = "Submit"
+					)
+					reset
+					(
+   						type = reset
+   						displayname = "Reset"
+					)
+				}
+				on edit
+				{
+					update
+					(
+   						type = submit
+   						displayname = "Update"
+					)
+					cancel
+					(
+   						type = cancel
+   						displayname = "Cancel"
+					)
+				}
+			}
+		}
+		default list All_Sub_Locations
+		{
+			displayName = "All Sub Locations"
+			show all rows from Sub_Location    
+			(
+				Sub_Location_ID as "Sub Location ID"
+				Sub_Location_Name as "Sub Location Name"
+				Body_Location_ID as "Body Location ID"
+			)
+			options
+			(
+				icon = "travel-world"
+	 		)
+			quickview
+			(
+				layout
+				(
+		 			type = -1
+					datablock1
+					(
+			 			layout type = -1
+		     			title = "Overview"
+						fields
+						(
+							Sub_Location_ID as "Sub Location ID"
+							Sub_Location_Name as "Sub Location Name"
+							Body_Location_ID as "Body Location ID"
+						)
+					)
+				)
+
+				menu
+    			(
+    	 			header
+    	 			(
+    		 			Edit 
+    		 			Duplicate 
+    		 			Delete 
+    	 			)
+							record
+							(
+								Edit   	   
+								Duplicate   	   
+								Delete   	   
+    						)
+    			)
+    			action
+    			(
+							on click
+							(
+								View Record   	   
+    						)
+							on right click
+							(
+								Edit   	   
+								Delete   	   
+								Duplicate   	   
+								View Record   	   
+    						)
+     			)
+			)
+			detailview
+			(
+				layout
+				(
+		 			type = 1
+					datablock1
+					(
+			 			layout type = -2
+		     			title = "Overview"
+						fields
+						(
+							Sub_Location_ID as "Sub Location ID"
+							Sub_Location_Name as "Sub Location Name"
+							Body_Location_ID as "Body Location ID"
+						)
+					)
+				)
+
+				menu
+    			(
+    	 			header
+    	 			(
+    		 			Edit 
+    		 			Duplicate 
+    		 			Delete 
+    	 			)
+    			)
+			)
+		}
+	}
+	section Trial
+	{
+		icon = "shopping-cash-register"
+				 page Dashboard(symptomID) 
+	 	 { 
+ 	 	 displayname = "Dashboard" 
+
+ 	 	 icon = "shopping-cash-register" 
+	 	 Content="<zml \n\t\t\tisPdfEnabled='false'\n\t\t\n\t\t\tisPrintEnabled='false'\n\t\t\n\t\t\tbgColor='#00ad8c'\n\t\t\n\t\t\twebDeviceConfig='{\"layout\":{\"displayType\":\"card\",\"design\":\"fluid\",\"style\":\"padding-right:0px;padding-top:0px;padding-bottom:0px;padding-left:0px;\"}}'\n\t\t\n\t\t\n\t\t>\n\t<layout>\n\t<row>\n\t<column\n   \t\t width=\"100%\"\n   \t>\n\t<panel \n>\n\t<pr    \t\t height = 'fill'\n   \t\t width = 'fill'\n\n>\n\t<pc    \t\t width = '100%'\n   \t\t bgColor = '#FF4C2F'\n   \t\t padding = '20px'\n   \t\t vAlign = 'middle'\n\n>\n\t<pr    \t\t height = 'auto'\n   \t\t width = 'auto'\n\n>\n\t<pc    \t\t vAlign = 'middle'\n\n>\n\t<button    \t\t text = 'Load Api Medic Data'\n   \t\t size = '20px'\n   \t\t color = '#FFFFFF'\n   \t\t bgColor = '#2A70E7'\n   \t\t type = 'rounded'\n   \t\t marginLeft = '0px'\n   \t\t marginRight = '0px'\n   \t\t marginBottom = '0px'\n   \t\t marginTop = '0px'\n   \t\t action = 'ExecuteFunction'\n   \t\t successMsg = 'API Medic Data Load Complete'\n   \t\t cornerRadius = '43.9844px'\n   \t\t functionName = 'function_load_data'\n\n\/>\n\n<\/pc>\n<\/pr>\n<\/pc>\n<\/pr>\n<\/panel>\n<\/column>\n<\/row><row>\n\t<column\n   \t\t width=\"50%\"\n   \t>\n\t<form    \t\t appLinkName = 'thisapp'\n   \t\t urlAppLinkName = 'thisapp'\n   \t\t heightType = 'auto'\n   \t\t linkName = 'Diagnosis_Form'\n   \t\t zc_ResetVal = 'RST'\n   \t\t zc_NextUrl = '#Page:Dashboard'\n   \t\t zc_Header = 'false'\n   \t\t zc_SubmitVal = 'Diagnose Now'\n   \t\t urlType = 'page'\n   \t\t zc_OpenUrlIn = 'same window'\n   \t\t allowPublicAccess = 'false'\n   \t\t titleSize = '20px'\n   \t\t italicTitle = 'false'\n   \t\t boldTitle = 'false'\n   \t\t title = 'What are you experiencing?'\n\n\/>\n\n<\/column><column\n   \t\t width=\"50%\"\n   \t>\n\t<report    \t\t appLinkName = 'thisapp'\n   \t\t linkName = 'FinalDiagnosis_Report'\n   \t\t heightType = 'auto'\n   \t\t heightValue = '700'\n   \t\t iszreport = 'false'\n   \t\t zc_Header = 'true'\n   \t\t zc_Footer = 'true'\n   \t\t zc_SecHeader = 'true'\n   \t\t zc_AddRec = 'false'\n   \t\t zc_EditRec = 'false'\n   \t\t zc_Print = 'false'\n   \t\t zc_Export = 'false'\n   \t\t zc_DelRec = 'false'\n   \t\t zc_DuplRec = 'false'\n   \t\t zc_EditBulkRec = 'true'\n   \t\t zc_SaveRec = 'true'\n   \t\t zc_Filter = 'true'\n   \t\t zc_Search = 'false'\n   \t\t zc_SumRow = 'true'\n   \t\t zc_ColMenu = 'true'\n   \t\t zc_RecSelect = 'true'\n   \t\t allowPublicAccess = 'false'\n   \t\t titleSize = '20px'\n   \t\t italicTitle = 'false'\n   \t\t boldTitle = 'false'\n   \t\t title = 'Diagnosis based on your symptoms'\n\n\/>\n\n<\/column>\n<\/row><row>\n\t<column\n   \t\t width=\"100%\"\n   \t>\n\t<dsp id='html_snippet' bgColor=\"#FFFFFF\">\n\t<![CDATA[htmlpage html_snippet(symptomID)\ncontent\n&lt;%{\n\t%&gt;\n&lt;iframe height=&apos;500px&apos; width=&apos;100%&apos; frameborder=&apos;0&apos; allowTransparency=&apos;true&apos; name= &apos;iframename&apos; scrolling=&apos;auto&apos; src=\u2018\u2019&gt;&lt;\/iframe&gt;\n&lt;%\n\n}%&gt;]]>\n<\/dsp>\n<\/column>\n<\/row>\n<\/layout>\n<\/zml>" 
+ 	 	}
+	}
+	section Symptoms
+	{
+		icon = "health-temperature-23"
+		form Symptoms
+		{
+			success message = "Symptom Added Successfully"
+			field alignment = left
+			Section
+			(
+				type = section
+	 			row = 1
+	 			column = 0   
+				width = medium
+			)
+			Sub_Body_Location_ID
+			(
+				type = number
+				displayname = "Sub Body Location ID"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			must have Symptom_ID
+			(
+				type = number
+				displayname = "Symptom ID"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			must have Symptom_Name
+			(
+    			type = text
+				displayname = "Symptom Name"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			Red_Flag
+			(
+    			type = text
+				displayname = "Red Flag"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			Synonyms
+			(
+				type = checkboxes
+				values = {"Choice 3", " Stomach ache", "Pyrosis", "Fast breathing", "Hyperventilation", "Burning abdominal pain", "Burning stomach ache", "Body aches", "Ache all over", "Diffuse muscle aches", "Aching limbs", "Pain in the extremities", "Swollen lymph nodes in the armpits", "Enlarged lymph nodes in the armpits", "Enlarged glands in the armpits", "Tremble at rest", "Pain in back", "Dorsalgia", "Backache", "Dyspnea", "Breathlessness", "Tightness in chest", "Oppressive feeling in the chest", "Palpitations", "Blackout", "Fainting", "Faint", "Lacrimation", "Tearing", "Lachrymation", "Secretion of tears", "Tear flow", "Epiphora", "Ptosis", "Temperature", "Feeling of weakness", "Fatigue", "Weakness", "Insomnia", "Stress", "Feeling of tension", "Shock", "Short unconsciousness", "Syncope", "Vertigo", "Angiooedema", "Angioedema", "Quincke's edema", "Polydipsia", "Chronic thirst", "Singultus", "Blocked nose", "Nasal congestion", "Otalgia", "Ear pain", "Pain in the ear", "Itch in the nose", "Pruritus", "Swollen lymph nodes on the neck", "Enlarged lymph nodes on the neck", "Enlarged glands on the neck", "Increase in weight", "Perspiration", "Shivering fit", "Ague", "Shivering", "Shivering attack"}
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+	
+			customize
+			(
+				icon = "health-temperature-23"
+			)
+			actions
+			{
+				on add
+				{
+					submit
+					(
+   						type = submit
+   						displayname = "Submit"
+					)
+					reset
+					(
+   						type = reset
+   						displayname = "Reset"
+					)
+				}
+				on edit
+				{
+					update
+					(
+   						type = submit
+   						displayname = "Update"
+					)
+					cancel
+					(
+   						type = cancel
+   						displayname = "Cancel"
+					)
+				}
+			}
+		}
+		default list All_Symptoms
+		{
+			displayName = "All Symptoms"
+			show all rows from Symptoms    
+			(
+				Symptom_ID as "Symptom ID"
+				Symptom_Name as "Symptom Name"
+				Sub_Body_Location_ID as "Sub Body Location ID"
+				Red_Flag as "Red Flag"
+				Synonyms
+			)
+			options
+			(
+				icon = "travel-world"
+	 		)
+			quickview
+			(
+				layout
+				(
+		 			type = -1
+					datablock1
+					(
+			 			layout type = -1
+		     			title = "Overview"
+						fields
+						(
+							Symptom_ID as "Symptom ID"
+							Symptom_Name as "Symptom Name"
+							Sub_Body_Location_ID as "Sub Body Location ID"
+							Red_Flag as "Red Flag"
+							Synonyms
+						)
+					)
+				)
+
+				menu
+    			(
+    	 			header
+    	 			(
+    		 			Edit 
+    		 			Duplicate 
+    		 			Delete 
+    	 			)
+							record
+							(
+								Edit   	   
+								Duplicate   	   
+								Delete   	   
+    						)
+    			)
+    			action
+    			(
+							on click
+							(
+								View Record   	   
+    						)
+							on right click
+							(
+								Edit   	   
+								Delete   	   
+								Duplicate   	   
+								View Record   	   
+    						)
+     			)
+			)
+			detailview
+			(
+				layout
+				(
+		 			type = 1
+					datablock1
+					(
+			 			layout type = -2
+		     			title = "Overview"
+						fields
+						(
+							Symptom_ID as "Symptom ID"
+							Symptom_Name as "Symptom Name"
+							Sub_Body_Location_ID as "Sub Body Location ID"
+							Red_Flag as "Red Flag"
+							Synonyms
+						)
+					)
+				)
+
+				menu
+    			(
+    	 			header
+    	 			(
+    		 			Edit 
+    		 			Duplicate 
+    		 			Delete 
+    	 			)
+    			)
+			)
+		}
+	}
+	section FinalDiagnosis
+	{
+		icon = "tech-desktop"
+		form Issues
+		{
+			success message = "Data Added Successfully!"
+			field alignment = left
+			Section
+			(
+				type = section
+	 			row = 1
+	 			column = 0   
+				width = medium
+			)
+			must have Symptom_ID
+			(
+				type = number
+				displayname = "Symptom ID"
+				initial value = 0
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			must have Issue_ID
+			(
+				type = number
+				displayname = "Issue ID"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			Issue_Name
+			(
+    			type = text
+				displayname = "Issue Name"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			Accuracy
+			(
+				type = number
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			Prof_Name
+			(
+    			type = text
+				displayname = "Prof Name"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			Ranking
+			(
+				type = number
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			Specialization
+			(
+				type = list
+				values  = Specialization.ID
+    			displayformat = [Name]
+				searchable = true
+				sortorder = ascending
+				height = 60px
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+	
+			customize
+			(
+				icon = "ui-1-bold-add"
+			)
+			actions
+			{
+				on add
+				{
+					submit
+					(
+   						type = submit
+   						displayname = "Submit"
+					)
+					reset
+					(
+   						type = reset
+   						displayname = "Reset"
+					)
+				}
+				on edit
+				{
+					update
+					(
+   						type = submit
+   						displayname = "Update"
+					)
+					cancel
+					(
+   						type = cancel
+   						displayname = "Cancel"
+					)
+				}
+			}
+		}
+		default summary FinalDiagnosis_Report
+		{
+			displayName = "FinalDiagnosis Report"
+			show all rows from Issues    
+			(
+				Issue_Name as "Issue Name"
+				Issue_ID as "Issue ID"
+				Accuracy
+				Prof_Name as "Prof Name"
+				Ranking
+				Symptom_ID as "Symptom ID"
+				Specialization
+				(
+					view = All_Specializations
+					delimiter = newline
+				)
+			)
+			sort by
+			(
+				Ranking ascending
+			)
+			options
+			(
+				display rows = 10
+				display records per row = 2
+				icon = "business-laptop-71"
+			)
+			quickview
+			(
+				layout
+				(
+		 			type = -2
+	     			recordsperrow = 2
+					datablock1
+					(
+			 			layout type = -2
+		     			title = "Overview"
+						fields
+						(
+							Issue_Name as "Issue Name"
+							Ranking
+						)
+					)
+				)
+
+				menu
+    			(
+    	 			header
+    	 			(
+    	 			)
+    			)
+			)
+			detailview
+			(
+				layout
+				(
+		 			type = 1
+					datablock1
+					(
+			 			layout type = -2
+		     			title = "Overview"
+						fields
+						(
+							Issue_Name as "Issue Name"
+							Issue_ID as "Issue ID"
+							Accuracy
+							Prof_Name as "Prof Name"
+							Ranking
+							Symptom_ID as "Symptom ID"
+							Specialization
+						)
+					)
+				)
+
+				menu
+    			(
+    	 			header
+    	 			(
+    	 			)
+    			)
+			)
+		}
+		list Report_Issue
+		{
+			displayName = "Report_Issue"
+			show all rows from Issues    
+			(
+				Symptom_ID as "Symptom ID"
+				Issue_ID as "Issue ID"
+				Issue_Name as "Issue Name"
+				Accuracy
+				Prof_Name as "Prof Name"
+				Ranking
+			)
+			group by
+			(
+				Symptom_ID ascending
+			)
+			sort by
+			(
+				Ranking ascending
+			)
+			options
+			(
+				icon = "design-bullet-list-67"
+	 		)
+			quickview
+			(
+				layout
+				(
+		 			type = -1
+					datablock1
+					(
+			 			layout type = -1
+		     			title = "Overview"
+						fields
+						(
+							Issue_Name as "Issue Name"
+							Ranking
+						)
+					)
+				)
+
+				menu
+    			(
+    	 			header
+    	 			(
+    		 			Edit 
+    		 			Duplicate 
+    		 			Delete 
+    	 			)
+							record
+							(
+								Edit   	   
+								Duplicate   	   
+								Delete   	   
+    						)
+    			)
+    			action
+    			(
+							on right click
+							(
+								Edit   	   
+								Delete   	   
+								Duplicate   	   
+								View Record   	   
+    						)
+     			)
+			)
+			detailview
+			(
+				layout
+				(
+		 			type = 1
+					datablock1
+					(
+			 			layout type = -2
+		     			title = "Overview"
+						fields
+						(
+							Symptom_ID as "Symptom ID"
+							Issue_ID as "Issue ID"
+							Issue_Name as "Issue Name"
+							Accuracy
+							Prof_Name as "Prof Name"
+							Ranking
+						)
+					)
+				)
+
+				menu
+    			(
+    	 			header
+    	 			(
+    		 			Edit 
+    		 			Duplicate 
+    		 			Delete 
+    	 			)
+    			)
+			)
+		}
+	}
+	section Specializations
+	{
+		icon = "tech-desktop"
+		form Specialization
+		{
+			success message = "Specialization Added Successfully"
+			field alignment = left
+			Section
+			(
+				type = section
+	 			row = 1
+	 			column = 0   
+				width = medium
+			)
+			Issue_ID
+			(
+				type = number
+				displayname = "Issue ID"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			Specialization_ID
+			(
+				type = number
+				displayname = "Specialization ID"
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+			Name
+			(
+    			type = text
+	 			row = 1
+	 			column = 1   
+				width = medium
+			)
+	
+			customize
+			(
+				icon = "design-path-unite"
+			)
+			actions
+			{
+				on add
+				{
+					submit
+					(
+   						type = submit
+   						displayname = "Submit"
+					)
+					reset
+					(
+   						type = reset
+   						displayname = "Reset"
+					)
+				}
+				on edit
+				{
+					update
+					(
+   						type = submit
+   						displayname = "Update"
+					)
+					cancel
+					(
+   						type = cancel
+   						displayname = "Cancel"
+					)
+				}
+			}
+		}
+		default list All_Specializations
+		{
+			displayName = "All Specializations"
+			show all rows from Specialization    
+			(
+				Issue_ID as "Issue ID"
+				Specialization_ID as "Specialization ID"
+				Name
+			)
+			options
+			(
+				icon = "travel-world"
+	 		)
+			quickview
+			(
+				layout
+				(
+		 			type = -1
+					datablock1
+					(
+			 			layout type = -1
+		     			title = "Overview"
+						fields
+						(
+							Issue_ID as "Issue ID"
+							Specialization_ID as "Specialization ID"
+							Name
+						)
+					)
+				)
+
+				menu
+    			(
+    	 			header
+    	 			(
+    		 			Edit 
+    		 			Duplicate 
+    		 			Delete 
+    	 			)
+							record
+							(
+								Edit   	   
+								Duplicate   	   
+								Delete   	   
+    						)
+    			)
+    			action
+    			(
+							on click
+							(
+								View Record   	   
+    						)
+							on right click
+							(
+								Edit   	   
+								Delete   	   
+								Duplicate   	   
+								View Record   	   
+    						)
+     			)
+			)
+			detailview
+			(
+				layout
+				(
+		 			type = 1
+					datablock1
+					(
+			 			layout type = -2
+		     			title = "Overview"
+						fields
+						(
+							Issue_ID as "Issue ID"
+							Specialization_ID as "Specialization ID"
+							Name
+						)
+					)
+				)
+
+				menu
+    			(
+    	 			header
+    	 			(
+    		 			Edit 
+    		 			Duplicate 
+    		 			Delete 
+    	 			)
+    			)
+			)
+		}
+	}
+	functions
+	{
+ 			void function_load_data()
+			{
+				// Pre load data from API Medic
+				// token - this expires every 5-6 hrs
+				tmpToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6IndlYi5hZ2tAZ21haWwuY29tIiwicm9sZSI6IlVzZXIiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9zaWQiOiI3MzU4IiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy92ZXJzaW9uIjoiMjAwIiwiaHR0cDovL2V4YW1wbGUub3JnL2NsYWltcy9saW1pdCI6Ijk5OTk5OTk5OSIsImh0dHA6Ly9leGFtcGxlLm9yZy9jbGFpbXMvbWVtYmVyc2hpcCI6IlByZW1pdW0iLCJodHRwOi8vZXhhbXBsZS5vcmcvY2xhaW1zL2xhbmd1YWdlIjoiZW4tZ2IiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL2V4cGlyYXRpb24iOiIyMDk5LTEyLTMxIiwiaHR0cDovL2V4YW1wbGUub3JnL2NsYWltcy9tZW1iZXJzaGlwc3RhcnQiOiIyMDIwLTA3LTAyIiwiaXNzIjoiaHR0cHM6Ly9zYW5kYm94LWF1dGhzZXJ2aWNlLnByaWFpZC5jaCIsImF1ZCI6Imh0dHBzOi8vaGVhbHRoc2VydmljZS5wcmlhaWQuY2giLCJleHAiOjE2MTEzODM2MjUsIm5iZiI6MTYxMTM3NjQyNX0.rb5lb4y9Utu52I-ZEiRZxiw75HLatDZ0WLb_ajzq9JU";
+				BaseURL = "https://sandbox-healthservice.priaid.ch";
+				//hardcode parameters
+				var_gender = 1;
+				// 0=M, 1=F, 2=B, 3=G or 1=M, 2=F
+				var_yearOfBirth = 1970;
+				//-------------------------- 
+				// #1: Load Body Locations
+				//-------------------------- 
+				// endpoint
+				SubURL = "/body/locations";
+				MapResponse = getUrl(BaseURL + SubURL + "?token=" + tmpToken + "&format=json&language=en-gb");
+				locationsList = MapResponse.toJSONList();
+				// delete old data to load fresh copy
+				delete from BL[ID != null];
+				delete from Sub_Location[Sub_Location_ID != null];
+				delete from Symptoms[Symptom_ID != null];
+				delete from Issues[Issue_ID != null];
+				delete from Specialization[Specialization_ID != null];
+				// In loop add body location data
+				for each  json in locationsList
+				{
+					var_bodyLocationID = json.getJSON("ID");
+					var_name = json.getJSON("Name");
+					insert into BL
+					[
+						BodyLocationID=var_bodyLocationID
+						Name=var_name
+						Added_User=zoho.loginuser
+					]
+				}
+				//-------------------------- 
+				// #2: Load Sub Body Locations
+				//-------------------------- 
+				// In loop call api for each sub body location
+				for each  json in locationsList
+				{
+					// endpoint
+					SubURL = "/body/locations/";
+					var_bodyLocationID = json.getJSON("ID");
+					MapResponse = getUrl(BaseURL + SubURL + var_bodyLocationID + "?token=" + tmpToken + "&format=json&language=en-gb");
+					subLocationsList = MapResponse.toJSONList();
+					// In loop add sub body location for each body location
+					for each  json in subLocationsList
+					{
+						var_subbodyLocationID = json.getJSON("ID");
+						var_name = json.getJSON("Name");
+						insert into Sub_Location
+						[
+							Body_Location_ID=var_bodyLocationID
+							Sub_Location_ID=var_subbodyLocationID
+							Sub_Location_Name=var_name
+							Added_User=zoho.loginuser
+						]
+						//-------------------------- 
+						// #3: Load Symptoms for all sub locations
+						//-------------------------- 
+						// endpoint
+						SubURL = "/symptoms/";
+						MapResponse = getUrl(BaseURL + SubURL + var_subbodyLocationID + "/" + var_gender + "?token=" + tmpToken + "&format=json&language=en-gb");
+						symptomsList = MapResponse.toJSONList();
+						// In loop add symptoms for each sub bodylocation
+						for each  json1 in symptomsList
+						{
+							var_symptomID = json1.getJSON("ID");
+							insert into Symptoms
+							[
+								Sub_Body_Location_ID=var_subbodyLocationID
+								Symptom_ID=var_symptomID
+								Symptom_Name=json1.getJSON("Name")
+								Synonyms=json1.getJSON("Synonyms")
+								Added_User=zoho.loginuser
+							]
+							//-------------------------- 
+							// #4: Load Diagnosis for symptoms var_symptomID - diagnosis includes issues & specializations - 
+							//--------------------------
+							// #a. retreive all diagnosis for the symptom id 
+							SubURL = "/diagnosis?symptoms=[";
+							MapResponse = getUrl(BaseURL + SubURL + var_symptomID + "]&gender=" + var_gender + "&year_of_birth=" + var_yearOfBirth + "&token=" + tmpToken + "&format=json&language=en-gb");
+							diagnosisList = MapResponse.toJSONList();
+							for each  diagnosis in diagnosisList
+							{
+								// #b. extract issue and add it to the issues form
+								var_issue_json = diagnosis.getJSON("Issue");
+								insert into Issues
+								[
+									Symptom_ID=var_symptomID
+									Issue_ID=var_issue_json.getJSON("ID")
+									Issue_Name=var_issue_json.getJSON("Name")
+									Ranking=var_issue_json.getJSON("Ranking")
+									Added_User=zoho.loginuser
+								]
+								// #c. extract specializationand add it to the specialization form
+								var_specialization_json = diagnosis.getJSON("Specialisation");
+								insert into Specialization
+								[
+									Specialization_ID=var_specialization_json.getJSON("ID")
+									Issue_ID=var_issue_json.getJSON("ID")
+									Name=var_specialization_json.getJSON("Name")
+									Added_User=zoho.loginuser
+								]
+							}
+						}
+					}
+				}
+			}
+ 			void updateReport()
+			{
+				info 'Update Report called';
+			}
+	}
+
+
+
+		workflow
+		{
+		form
+		{
+			Send_Email_Form_Propertie as "Send Email - Form Properties"
+			{
+				type =  presuccess
+				form = Diagnosis_Form
+				on start
+				{
+				}
+			}
+			diagnosisFormSubmission as "diagnosisFormSubmission"
+			{
+				type =  form
+				form = Diagnosis_Form
+				record event = on add or edit
+
+				on success
+				{
+					actions 
+					{
+						custom deluge script
+						(
+											// openUrl("https://app.zohocreator.com/<user_Name>/<app_name>/view-embed/ReportA?LookupField.ID="+ input.Lookupfield_A+"&zc_ifr_load=true","iframe","iframename");
+										// openUrl("https://creatorapp.zoho.com/sweta.kala/diagnosis-selection/#Report:FinalDiagnosis_Report?Symptom_ID=" + input.Symptoms.Symptom_ID + "&zc_ifr_load=true","iframe","iframename");
+										openUrl("https://creatorapp.zoho.com/sweta.kala/diagnosis-selection/#Report:FinalDiagnosis_Report?Symptom_ID=" + input.Symptoms.Symptom_ID + "&zc_ifr_load=true","iframe","iframename");
+						)
+					}
+				}
+
+			}
+		}
+
+
+	}
+	share_settings
+	{
+			"Read"
+			{
+				name = "Read"
+				type = Users_Permissions
+				permissions = {Chat:true, Predefined:true, ApiAccess:true, PIIAccess:true, ePHIAccess:true}
+				description = "This profile will have read permission for all components\n"
+			}
+			"Write"
+			{
+				name = "Write"
+				type = Users_Permissions
+				permissions = {Chat:true, Predefined:true, ApiAccess:true, PIIAccess:true, ePHIAccess:true}
+				description = "This profile will have write permission for all components\n"
+			}
+			"Administrator"
+			{
+				name = "Administrator"
+				type = Users_Permissions
+				permissions = {Chat:true, Predefined:true, ApiAccess:true, PIIAccess:true, ePHIAccess:true}
+				description = "This profile will have all the permissions.\n"
+			}
+			roles
+			{
+				"CEO"
+				{
+					description = "User belonging to this role can access data of all other users."
+				}
+			}
+	}
+
+	customize
+	{
+		
+		layout = "tab"
+		color = "black"
+		base theme = "professional"
+		new theme = 1
+		
+		icons = true
+		icons style = outline
+	}
+
+	
+}
